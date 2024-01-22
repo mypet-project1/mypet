@@ -12,7 +12,10 @@ class TipSerializers(serializers.ModelSerializer):
         animal = validated_data.get("animal")
         user = validated_data.get("user")
         content = validated_data.get("content")
+        tip_media = validated_data.get("tip_media")
 
-        tip = Tip.objects.create(animal=animal, user=user, content=content)
+        tip = Tip.objects.create(
+            animal=animal, user=user, content=content, tip_media=tip_media
+        )
 
         return tip
