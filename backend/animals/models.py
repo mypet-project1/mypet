@@ -12,7 +12,7 @@ class Animal(models.Model):
             models.Index(fields=["-created_at"]),
             models.Index(fields=["name"]),
         ]
-        ordering = ["-created_at"]
+        ordering = ["name"]
 
     def __str__(self):
         return self.name
