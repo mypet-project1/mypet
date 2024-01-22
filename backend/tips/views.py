@@ -1,9 +1,11 @@
+import os
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 
 from django.shortcuts import get_object_or_404
 
+from config import settings
 from animals.models import Animal
 from .models import Tip
 from .serializers import TipSerializers
@@ -35,5 +37,45 @@ class TipAPIView(APIView):
                 return Response(status=status.HTTP_201_CREATED)
             else:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class OneTipAPIView(APIView):
+    def get(self, request, animal, id):
+        animal_id = get_object_or_404(Animal, name=animal)
+        tip = get_object_or_404(Tip, id=id, animal=animal_id)
+        serializer = TipSerializers(tip)
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, animal, id):
+        animal_id = get_object_or_404(Animal, name=animal)
+        tip = get_object_or_404(Tip, id=id, animal=animal_id)
+
+        if tip.tip_media:
+            os.remove(os.path.join(settings.MEDIA_ROOT, tip.tip_media.path))
+
+        request.data["user"] = 1  # request.user.id
+        request.data["tip_media"] = request.FILES.getlist("tip_media")[0]
+        serializer = TipSerializers(tip, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, animal, id):
+        animal_id = get_object_or_404(Animal, name=animal)
+        tip = get_object_or_404(Tip, id=id, animal=animal_id)
+
+        if tip:
+            tip.delete()
+
+            return Response(status=status.HTTP_200_OK)
+
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
