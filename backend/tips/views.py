@@ -43,7 +43,7 @@ class TipAPIView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class SerchTipAPIView(APIView):
+class SearchTipAPIView(APIView):
     def get(self, request, word):
         if word:
             tips = Tip.objects.filter(
