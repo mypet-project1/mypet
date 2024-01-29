@@ -22,7 +22,7 @@ class Hospital(models.Model):
         ]
         ordering = ["name"]
 
-    def str(self):
+    def __str__(self):
         return f"{self.name} - {self.call}"
 
 
@@ -50,5 +50,5 @@ class Review(models.Model):
         ]
         ordering = ["-created_at"]
 
-    def str(self):
+    def __str__(self):
         return f"[{self.hospital}] {self.user} review"
