@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from django.shortcuts import get_object_or_404
+
 from .models import Hospital, Review
 
 
@@ -7,6 +9,19 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = "__all__"
+
+    def create(self, validated_data):
+        hospital = validated_data.get("hospital")
+        user = validated_data.get("user")
+        title = validated_data.get("title")
+        content = validated_data.get("content")
+        grade = validated_data.get("grade")
+
+        review = Review.objects.create(
+            hospital=hospital, user=user, title=title, content=content, grade=grade
+        )
+
+        return review
 
 
 class HospitalSerializer(serializers.ModelSerializer):
