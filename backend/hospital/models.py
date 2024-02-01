@@ -7,6 +7,7 @@ from accounts.models import User
 class Hospital(models.Model):
     name = models.CharField(max_length=50)
     address = models.TextField()
+    road_address = models.TextField(blank=True)
     call = models.CharField(max_length=20)
     info = models.TextField(blank=True)
 
