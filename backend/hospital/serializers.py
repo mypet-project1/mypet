@@ -15,6 +15,7 @@ class HospitalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hospital
         fields = [
+            "id",
             "name",
             "address",
             "road_address",
@@ -23,3 +24,16 @@ class HospitalSerializer(serializers.ModelSerializer):
             "updated_at",
             "review",
         ]
+
+    def create(self, validated_data):
+        name = validated_data.get("name")
+        address = validated_data.get("address")
+        road_address = validated_data.get("road_address")
+        call = validated_data.get("call")
+        info = validated_data.get("info")
+
+        hospital = Hospital.objects.create(
+            name=name, address=address, road_address=road_address, call=call, info=info
+        )
+
+        return hospital
