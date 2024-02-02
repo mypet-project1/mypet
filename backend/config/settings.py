@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "animals",
     "tips",
     "hospital",
+    "chat",
 ]
 
 AUTH_USER_MODEL = "accounts.User"
