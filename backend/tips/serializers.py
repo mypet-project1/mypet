@@ -1,12 +1,23 @@
 from rest_framework import serializers
 
+from animals.serializers import AnimalSerializer
 from .models import Tip
 
 
 class TipSerializers(serializers.ModelSerializer):
+    animal = AnimalSerializer(read_only=True)
+
     class Meta:
         model = Tip
-        fields = "__all__"
+        fields = [
+            "id",
+            "animal",
+            "user",
+            "content",
+            "tip_media",
+            "created_at",
+            "updated_at",
+        ]
 
     def create(self, validated_data):
         animal = validated_data.get("animal")
